@@ -29,7 +29,24 @@ import warnings
 from pathlib import Path
 
 class Flapp:
+	# Loaded/cached locales
 	_loaded_locales = {}
+
+	@staticmethod
+	def _yaml_loader(p: Path, locale: str, fl: Flapp):
+		try:
+			import yaml
+			if p.suffix in [".yaml", ".yml"]:
+				with p.open() as fp:
+					fl.add_locale(locale, fp)
+		except ImportError:
+			pass
+
+	# Loaders we can use to load different files
+	_loaders = {
+		"yaml": _yaml_loader,
+		"json": lambda p, l, fl: fl.load_locale(l, json.load(p.open())) if p.suffix == ".json" else None,
+	}
 
 	def _pluralize(self, var, arg: str) -> str:
 		singular = ""
@@ -101,6 +118,12 @@ class Flapp:
 	def remove_locale(self, locale: str):
 		del self._loaded_locales[locale]
 
+	def add_loader(self, name: str, loader: callable):
+		self._loaders[name] = loader
+	
+	def remove_loader(self, name: str):
+		del self._loaders[name]
+
 	def translate(self, node: str, *args, **kwargs):
 		locale = self.default if not args else args[0]
 
@@ -111,20 +134,9 @@ class Flapp:
 				raise FileNotFoundError(f"Locale file {lpath} does not exist!")
 			if not lpath.is_file():
 				raise FileExistsError(f"{self.locales} is not a file!")
-			
-			with lpath.open() as f:
-				# interpret yaml files
-				if lpath.suffix == ".json":
-					self._loaded_locales[locale] = json.loads(f.read())
-				elif lpath.suffix in [".yml", ".yaml"]:
-					try:
-						import yaml
-						self._loaded_locales[locale] = yaml.safe_load(f)
-					except ImportError:
-						raise NotImplementedError(f"Loading {lpath.suffix} files are unsupported at this time.")
-				else:
-					# TODO: maybe allow different parsers?
-					raise NotImplementedError(f"Loading {lpath.suffix} files are unsupported at this time.")
+
+			for _,loader in self._loaders.items():
+				loader(lpath, locale, self)
 		
 		# Split the node string into an array
 		path = node.split('.')
@@ -187,6 +199,3 @@ class Flapp:
 			# Skip over the just processed formatter
 			idx = unformatted_val.find("{", idx + len(str(replacement)))
 		return unformatted_val
-				
-		
-		

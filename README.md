@@ -105,6 +105,21 @@ Hello, {USERNAME|title}! It is {NOW|date:\"D d M Y\"}!
 You can verify if a locale is loaded using `locale_loaded("en_GB")` and you can unload
 loaded locales with `remove_locale("en_GB")` (replacing "en_GB" with the locale format you're using)
 
+You can also extend the file loader system by adding a callable with `add_loader` or removing it with
+`remove_loader`. An example loader is the yaml file loader:
+
+```python
+def _yaml_loader(p: Path, locale: str, fl: Flapp):
+		try:
+			import yaml
+			if p.suffix in [".yaml", ".yml"]:
+				with p.open() as fp:
+					fl.add_locale(locale, fp)
+		except ImportError:
+			pass
+```
+then call `add_loader("yaml", _yaml_loader)` to add it. The string argument is just an identfier for `remove_loader` calls later.
+
 ---
 
 ## License
