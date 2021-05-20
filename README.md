@@ -57,7 +57,7 @@ There are some basic filters that come included:
 | filter | Description | Arguments | Default |
 | ----------- | ----------- | ----------- | ----------- |
 | `pluralize` | Add text if a number is greater than 1 | comma separated list based on count | "s" if plural |
-| `yesno` | Convert a boolean value to the language's boolean representation | comma separated pair in place of "yes,no" | "yes" or "no" |
+| `yesno` | Convert a boolean value to the language's boolean representation | comma separated pair in place of "no,yes" | "yes" or "no" |
 | `datetime` | Format the variable as a datetime string | strftime-compatible format string | datetime default formatt |
 | `cut` | Removes text from a variable | quoted string of text to remove | *N/A* |
 | `empty_if_false` | Returns an empty string if the variable evaluates to False | value returned if True | *N/A* |

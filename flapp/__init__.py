@@ -25,7 +25,6 @@ import datetime
 import time
 import typing
 import json
-import yaml
 import warnings
 from pathlib import Path
 
@@ -103,9 +102,7 @@ class Flapp:
 		del self._loaded_locales[locale]
 
 	def translate(self, node: str, *args, **kwargs):
-		print(f"args: {args}, kwargs: {kwargs}")
 		locale = self.default if not args else args[0]
-		print(f"Using locale {locale}")
 
 		if locale not in self._loaded_locales:
 			lpath = self.locales / self.file_pattern.format(locale=locale)
@@ -120,7 +117,11 @@ class Flapp:
 				if lpath.suffix == ".json":
 					self._loaded_locales[locale] = json.loads(f.read())
 				elif lpath.suffix in [".yml", ".yaml"]:
-					self._loaded_locales[locale] = yaml.safe_load(f)
+					try:
+						import yaml
+						self._loaded_locales[locale] = yaml.safe_load(f)
+					except ImportError:
+						raise NotImplementedError(f"Loading {lpath.suffix} files are unsupported at this time.")
 				else:
 					# TODO: maybe allow different parsers?
 					raise NotImplementedError(f"Loading {lpath.suffix} files are unsupported at this time.")
