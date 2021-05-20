@@ -38,7 +38,7 @@ class Flapp:
 			import yaml
 			if p.suffix in [".yaml", ".yml"]:
 				with p.open() as fp:
-					fl.add_locale(locale, fp)
+					fl.add_locale(locale, fp.read())
 		except ImportError:
 			pass
 
