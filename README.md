@@ -79,7 +79,7 @@ user:
 >> from flapp import Flapp
 >> from random import choice
 >> translator = Flapp("/path/to/locales", identifier="translations.{locale}.yml", default="en_US")
->> def memecase(variable, argument: str):
+>> def memecase(locale: str, variable, argument: str):
 >>    return ''.join(choice((str.upper, str.lower))(c) for c in str(variable))
 >> translator.add_filter('memecase', memecase)
 >> translator.translate("user.hello-message", who="World")

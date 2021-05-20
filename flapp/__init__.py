@@ -49,7 +49,7 @@ class Flapp:
 	}
 
 	@staticmethod
-	def _pluralize(var, arg: str) -> str:
+	def _pluralize(locale: str, var, arg: str) -> str:
 		singular = ""
 		plural = "s" if not arg else arg
 		if "," in arg:
@@ -60,14 +60,14 @@ class Flapp:
 		return singular if int(var) == 1 else plural
 
 	@staticmethod
-	def _yesno(var, arg: str) -> str:
+	def _yesno(locale: str, var, arg: str) -> str:
 		if not arg:
 			return "yes" if var else "no"
 		elif "," in arg:
 			return arg.split(",")[int(bool(var))]
 
 	@staticmethod
-	def _datetime(var, arg: str) -> str:
+	def _datetime(locale: str, var, arg: str) -> str:
 		# TODO: Support locale-specific date formatting?
 		if isinstance(var, datetime.datetime):
 			return var.strftime(arg)
@@ -83,14 +83,14 @@ class Flapp:
 		"pluralize": _pluralize,
 		"yesno": _yesno, 
 		"datetime": _datetime, 
-		"cut": lambda v,a: v.replace(a, ""), 
-		"empty_if_false": lambda v,a: "" if not v else a, 
-		"empty_if_true": lambda v,a: "" if v else a, 
-		"default_if_none": lambda v,a: a if v == None else v, 
-		"lower": lambda v,a: str(v).lower(), 
-		"upper": lambda v,a: str(v).upper(), 
-		"title": lambda v,a: " ".join(s.capitalize() for s in str(v).split(" ")), 
-		"join": lambda v,a: a.join(v), 
+		"cut": lambda l,v,a: v.replace(a, ""), 
+		"empty_if_false": lambda l,v,a: "" if not v else a, 
+		"empty_if_true": lambda l,v,a: "" if v else a, 
+		"default_if_none": lambda l,v,a: a if v == None else v, 
+		"lower": lambda l,v,a: str(v).lower(), 
+		"upper": lambda l,v,a: str(v).upper(), 
+		"title": lambda l,v,a: " ".join(s.capitalize() for s in str(v).split(" ")), 
+		"join": lambda l,v,a: a.join(v), 
 	}
 
 	def __init__(self, locale_dir: typing.Union[Path, str], file_pattern: str, default: str):
@@ -195,7 +195,7 @@ class Flapp:
 						warnings.warn(f"\"{func}\" specified but no filter by that name exists!", SyntaxWarning)
 					replacement = value
 				else:
-					replacement = self._filters[func](value, args)
+					replacement = self._filters[func](locale, value, args)
 
 			unformatted_val = unformatted_val[0:idx] + str(replacement) + unformatted_val[endpos+1:]
 
