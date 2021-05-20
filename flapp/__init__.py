@@ -48,7 +48,8 @@ class Flapp:
 		"json": lambda p, l, fl: fl.load_locale(l, json.load(p.open())) if p.suffix == ".json" else None,
 	}
 
-	def _pluralize(self, var, arg: str) -> str:
+	@staticmethod
+	def _pluralize(var, arg: str) -> str:
 		singular = ""
 		plural = "s" if not arg else arg
 		if "," in arg:
@@ -58,13 +59,15 @@ class Flapp:
 		# 2 or 3 being different in some languages
 		return singular if int(var) == 1 else plural
 
-	def _yesno(self, var, arg: str) -> str:
+	@staticmethod
+	def _yesno(var, arg: str) -> str:
 		if not arg:
 			return "yes" if var else "no"
 		elif "," in arg:
 			return arg.split(",")[int(bool(var))]
 
-	def _datetime(self, var, arg: str) -> str:
+	@staticmethod
+	def _datetime(var, arg: str) -> str:
 		# TODO: Support locale-specific date formatting?
 		if isinstance(var, datetime.datetime):
 			return var.strftime(arg)
