@@ -21,8 +21,9 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
+# See: https://stackoverflow.com/a/33533514
+from __future__ import annotations
 import datetime
-import time
 import typing
 import json
 import warnings
@@ -67,7 +68,7 @@ class Flapp:
 			return arg.split(",")[int(bool(var))]
 
 	@staticmethod
-	def _datetime(locale: str, var, arg: str) -> str:
+	def _datetime(locale: str, var: typing.Union[datetime.datetime, datetime.date, float, int], arg: str) -> str:
 		# TODO: Support locale-specific date formatting?
 		if isinstance(var, datetime.datetime):
 			return var.strftime(arg)

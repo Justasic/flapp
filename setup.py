@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Copyright 2021 Justin Crawford <Justin@stacksmash.net>
 
@@ -25,13 +26,9 @@ DEALINGS IN THE SOFTWARE.
 import io
 import os
 import sys
-from shutil import rmtree
 import setuptools
 
 if __name__ == "__main__":
-	#here = os.path.abspath(os.path.dirname(__file__))
-
-	#with io.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 	with open("README.md") as f:
 		long_description = '\n' + f.read()
 	setuptools.setup(
@@ -41,13 +38,15 @@ if __name__ == "__main__":
 			long_description=long_description,
 			long_description_content_type='text/markdown',
 			author='NightShadow',
-			author_email='Justin@stacksmash.net`',
+			author_email='OpenSource@stacksmash.net',
 			url='https://github.com/justasic/flapp/',
-			python_requires='>=3.6.0',
+			python_requires='>=3.7.0',
 			packages=setuptools.find_packages(),
 			classifiers=[
 				"Programming Language :: Python :: 3",
 				"Operating System :: OS Independent",
-				"License :: OSI Approved :: MIT"
-			]
+				"License :: OSI Approved :: MIT",
+				"Intended Audience :: Developers"
+			],
+			license="MIT"
 	)
