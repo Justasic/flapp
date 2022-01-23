@@ -165,11 +165,11 @@ class Flapp:
 			if endpos == -1:
 				raise SyntaxError("Expected '}' but got EOF, expression begins at column %d" % idx)
 			
-			expression = unformatted_val[idx+1:endpos]
+			variable = unformatted_val[idx+1:endpos]
 			replacement = ""
-			variable = func = args = None
-			if "|" in expression:
-				variable, func = expression.split("|", 1)
+			func = args = None
+			if "|" in variable:
+				variable, func = variable.split("|", 1)
 				if ":" in func:
 					func, args = func.split(":", 1)
 
