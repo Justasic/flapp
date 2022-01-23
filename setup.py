@@ -33,7 +33,7 @@ if __name__ == "__main__":
 		long_description = '\n' + f.read()
 	setuptools.setup(
 			name='flapp',
-			version='1.0',
+			version='1.0.1',
 			description='Language translation and formatting library',
 			long_description=long_description,
 			long_description_content_type='text/markdown',

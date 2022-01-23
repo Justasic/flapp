@@ -117,7 +117,7 @@ class Flapp:
 		return locale in self._loaded_locales
 
 	def add_locale(self, locale: str, locale_strings: dict):
-		self._loaded_locales[locale] = dict
+		self._loaded_locales[locale] = locale_strings
 	
 	def remove_locale(self, locale: str):
 		del self._loaded_locales[locale]
